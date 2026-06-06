@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Carel Omario — Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Serif+Display:ital@0;1&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #0a0a08; --cream: #f0ebe0; --gold: #c9a84c;
+      --rust: #c44b2b; --muted: #6b6860; --card: #121210;
+      --border: rgba(201,168,76,0.18);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--cream); font-family: 'Space Mono', monospace; overflow-x: hidden; cursor: none; }
+
+    .cursor { width: 10px; height: 10px; background: var(--gold); border-radius: 50%; position: fixed; top:0; left:0; pointer-events: none; z-index: 9999; mix-blend-mode: difference; }
+    .cursor-ring { width: 30px; height: 30px; border: 1px solid var(--gold); border-radius: 50%; position: fixed; top:0; left:0; pointer-events: none; z-index: 9998; opacity: 0.5; }
+
+    nav {
+      position: fixed; top:0; left:0; right:0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 2.5rem;
+      background: rgba(10,10,8,0.92); backdrop-filter: blur(6px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo { font-family: 'Bebas Neue'; font-size: 1.3rem; letter-spacing: 0.1em; color: var(--gold); }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a { color: var(--muted); text-decoration: none; font-size: 0.68rem; letter-spacing: 0.18em; text-transform: uppercase; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--cream); }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh; display: flex; flex-direction: column; justify-content: flex-end;
+      padding: 5rem 2.5rem 3.5rem; position: relative; overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 70% 60% at 80% 30%, rgba(201,168,76,0.07), transparent 70%),
+                  radial-gradient(ellipse 50% 50% at 10% 80%, rgba(196,75,43,0.05), transparent 60%);
+    }
+    .hero-grid {
+      position: absolute; inset: 0;
+      background-image: linear-gradient(rgba(201,168,76,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(201,168,76,0.04) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+    .hero-tag { font-size: 0.65rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--gold); margin-bottom: 1rem; opacity:0; animation: slideUp 0.8s 0.2s forwards; }
+    .hero-name { font-family: 'Bebas Neue'; font-size: clamp(3.5rem,11vw,10rem); line-height: 0.88; color: var(--cream); opacity:0; animation: slideUp 0.9s 0.4s forwards; }
+    .hero-name span { color: var(--gold); }
+    .hero-sub { margin-top: 1.2rem; font-family: 'DM Serif Display', serif; font-style: italic; font-size: clamp(1rem,2vw,1.4rem); color: var(--muted); max-width: 480px; line-height: 1.5; opacity:0; animation: slideUp 1s 0.6s forwards; }
+    .hero-actions { display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap; opacity:0; animation: slideUp 1s 0.8s forwards; }
+    .btn-primary { background: var(--gold); color: var(--bg); padding: 0.75rem 2rem; font-family: 'Space Mono'; font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; border: none; cursor: none; text-decoration: none; display: inline-block; transition: transform 0.2s, box-shadow 0.2s; }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(201,168,76,0.3); }
+    .btn-outline { background: transparent; color: var(--cream); padding: 0.75rem 2rem; font-family: 'Space Mono'; font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; border: 1px solid var(--border); cursor: none; text-decoration: none; display: inline-block; transition: border-color 0.2s, color 0.2s; }
+    .btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+
+    @keyframes slideUp { from { opacity:0; transform: translateY(24px); } to { opacity:1; transform: translateY(0); } }
+
+    /* MARQUEE */
+    .marquee-wrap { overflow: hidden; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 0.9rem 0; background: var(--card); }
+    .marquee-track { display: flex; width: max-content; animation: marquee 20s linear infinite; gap: 2.5rem; }
+    .marquee-item { font-family: 'Bebas Neue'; font-size: 1.2rem; letter-spacing: 0.15em; color: var(--muted); white-space: nowrap; display: flex; align-items: center; gap: 2.5rem; }
+    .marquee-dot { color: var(--gold); font-size: 0.4rem; }
+    @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+    /* SECTIONS */
+    .section { padding: 4rem 2.5rem; }
+    .section-inner { max-width: 1240px; margin: 0 auto; }
+    .section-label { font-size: 0.62rem; letter-spacing: 0.32em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.8rem; }
+    .section-title { font-family: 'Bebas Neue'; font-size: clamp(2rem,5vw,4rem); letter-spacing: 0.03em; margin-bottom: 2.5rem; }
+
+    /* ABOUT */
+    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+    .about-title { font-family: 'DM Serif Display', serif; font-size: clamp(1.6rem,3vw,2.5rem); line-height: 1.2; margin-bottom: 1rem; }
+    .about-text { color: var(--muted); line-height: 1.85; font-size: 0.82rem; margin-bottom: 0.8rem; }
+    .about-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 2rem; }
+    .stat { border-top: 1px solid var(--border); padding-top: 0.9rem; }
+    .stat-num { font-family: 'Bebas Neue'; font-size: 2.4rem; color: var(--gold); line-height: 1; }
+    .stat-label { font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-top: 0.2rem; }
+    .about-card { background: var(--card); border: 1px solid var(--border); padding: 2rem; position: relative; overflow: hidden; }
+    .about-card::before { content:''; position: absolute; top:0; left:0; right:0; height: 2px; background: linear-gradient(90deg, var(--gold), var(--rust)); }
+    .avatar-box { width: 100%; aspect-ratio: 1; background: linear-gradient(135deg,rgba(201,168,76,0.1),rgba(196,75,43,0.08)); display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue'; font-size: 4rem; color: var(--gold); opacity: 0.5; border: 1px solid var(--border); margin-bottom: 1.2rem; }
+    .chips { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+    .chip { font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; padding: 0.3rem 0.7rem; border: 1px solid var(--border); color: var(--muted); transition: border-color 0.2s, color 0.2s; }
+    .chip:hover { border-color: var(--gold); color: var(--gold); }
+
+    /* SERVICES */
+    .services-bg { background: var(--card); }
+    .services-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5px; background: var(--border); }
+    .service-card { background: var(--bg); padding: 2.2rem 2rem; position: relative; overflow: hidden; transition: background 0.3s; }
+    .service-card:hover { background: #0f0f0d; }
+    .service-card::after { content:''; position: absolute; bottom:0; left:0; width:0; height:2px; background: var(--gold); transition: width 0.4s; }
+    .service-card:hover::after { width: 100%; }
+    .service-num { font-family: 'Bebas Neue'; font-size: 2.8rem; color: rgba(201,168,76,0.1); line-height: 1; margin-bottom: 0.8rem; }
+    .service-name { font-family: 'DM Serif Display', serif; font-size: 1.25rem; color: var(--cream); margin-bottom: 0.7rem; }
+    .service-desc { font-size: 0.76rem; color: var(--muted); line-height: 1.75; }
+    .service-tools { margin-top: 1rem; display: flex; flex-wrap: wrap; gap: 0.35rem; }
+    .tool-tag { font-size: 0.58rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold); border: 1px solid rgba(201,168,76,0.22); padding: 0.2rem 0.5rem; }
+
+    /* PORTFOLIO */
+    .projects-grid { display: grid; grid-template-columns: repeat(12,1fr); gap: 1rem; }
+    .project-card { background: var(--card); border: 1px solid var(--border); overflow: hidden; position: relative; transition: transform 0.3s, box-shadow 0.3s; }
+    .project-card:hover { transform: translateY(-3px); box-shadow: 0 16px 40px rgba(0,0,0,0.5); }
+    .project-card:nth-child(1) { grid-column: span 7; }
+    .project-card:nth-child(2) { grid-column: span 5; }
+    .project-card:nth-child(3) { grid-column: span 4; }
+    .project-card:nth-child(4) { grid-column: span 8; }
+    .project-card:nth-child(5) { grid-column: span 6; }
+    .project-card:nth-child(6) { grid-column: span 6; }
+    .project-thumb { aspect-ratio: 16/9; position: relative; overflow: hidden; }
+    .project-card:nth-child(2) .project-thumb, .project-card:nth-child(3) .project-thumb { aspect-ratio: 4/3; }
+    .project-visual { width:100%; height:100%; display:flex; align-items:center; justify-content:center; font-family:'Bebas Neue'; font-size: 2.5rem; letter-spacing: 0.05em; transition: transform 0.5s; }
+    .project-card:hover .project-visual { transform: scale(1.04); }
+    .pv1{background:linear-gradient(135deg,#1a120a,#2a1a06);color:rgba(201,168,76,0.4);}
+    .pv2{background:linear-gradient(135deg,#0a1020,#0f1a30);color:rgba(80,120,200,0.4);}
+    .pv3{background:linear-gradient(135deg,#150a15,#200f20);color:rgba(180,80,180,0.4);}
+    .pv4{background:linear-gradient(135deg,#0a1510,#0f2018);color:rgba(80,200,120,0.4);}
+    .pv5{background:linear-gradient(135deg,#150a0a,#201010);color:rgba(196,75,43,0.4);}
+    .pv6{background:linear-gradient(135deg,#10120a,#181c0f);color:rgba(160,180,80,0.4);}
+    .project-overlay { position:absolute; inset:0; background:rgba(10,10,8,0.85); display:flex; align-items:center; justify-content:center; opacity:0; transition: opacity 0.3s; }
+    .project-card:hover .project-overlay { opacity:1; }
+    .overlay-link { font-size: 0.65rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); border: 1px solid var(--gold); padding: 0.6rem 1.3rem; text-decoration: none; }
+    .project-info { padding: 1.1rem 1.3rem; }
+    .project-cat { font-size: 0.58rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.3rem; }
+    .project-name { font-family: 'DM Serif Display', serif; font-size: 1.05rem; color: var(--cream); margin-bottom: 0.3rem; }
+    .project-desc { font-size: 0.68rem; color: var(--muted); line-height: 1.55; }
+
+    /* CONTACT */
+    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }
+    .contact-title { font-family: 'Bebas Neue'; font-size: clamp(2rem,5vw,4rem); line-height: 0.92; margin-bottom: 1rem; }
+    .contact-title span { color: var(--gold); }
+    .contact-desc { font-size: 0.78rem; color: var(--muted); line-height: 1.8; margin-bottom: 1.8rem; }
+    .contact-info { display: flex; flex-direction: column; gap: 0.8rem; }
+    .contact-item { display: flex; align-items: center; gap: 0.8rem; font-size: 0.75rem; color: var(--muted); border-bottom: 1px solid var(--border); padding-bottom: 0.8rem; }
+    .contact-item-icon { color: var(--gold); min-width: 1rem; }
+    .contact-form { background: var(--card); border: 1px solid var(--border); padding: 2rem; position: relative; }
+    .contact-form::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background: linear-gradient(90deg, var(--gold), var(--rust)); }
+    .form-group { margin-bottom: 1.1rem; }
+    .form-label { display:block; font-size: 0.6rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.4rem; }
+    .form-input, .form-textarea { width:100%; background: rgba(255,255,255,0.03); border: 1px solid var(--border); color: var(--cream); font-family: 'Space Mono'; font-size: 0.78rem; padding: 0.7rem 0.9rem; outline: none; transition: border-color 0.2s; }
+    .form-input:focus, .form-textarea:focus { border-color: var(--gold); }
+    .form-textarea { resize: vertical; min-height: 110px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; }
+
+    footer { border-top: 1px solid var(--border); padding: 1.4rem 2.5rem; display: flex; align-items: center; justify-content: space-between; }
+    .footer-logo { font-family: 'Bebas Neue'; font-size: 1rem; letter-spacing: 0.1em; color: var(--gold); }
+    .footer-copy { font-size: 0.62rem; color: var(--muted); }
+    .footer-socials { display: flex; gap: 1rem; }
+    .social-link { font-size: 0.62rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+    .social-link:hover { color: var(--gold); }
+
+    .reveal { opacity:0; transform: translateY(22px); transition: opacity 0.6s, transform 0.6s; }
+    .reveal.visible { opacity:1; transform: translateY(0); }
+
+    @media (max-width: 900px) {
+      nav { padding: 0.8rem 1.2rem; }
+      .nav-links { display: none; }
+      .hero { padding: 4rem 1.2rem 2.5rem; }
+      .section { padding: 2.5rem 1.2rem; }
+      .about-grid, .contact-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .services-grid { grid-template-columns: 1fr; }
+      .projects-grid { grid-template-columns: 1fr; }
+      .project-card:nth-child(n) { grid-column: span 1; }
+      footer { flex-direction: column; gap: 0.8rem; text-align: center; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<nav>
+  <div class="nav-logo">KCO</div>
+  <ul class="nav-links">
+    <li><a href="#about">À propos</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#portfolio">Portfolio</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-tag">— Développeur Web &amp; Designer Créatif</div>
+  <h1 class="hero-name">KOM FOME<br><span>CAREL</span><br>OMARIO</h1>
+  <p class="hero-sub">Expériences numériques qui marient <em>performance technique</em> et <em>esthétique mémorable.</em></p>
+  <div class="hero-actions">
+    <a href="#portfolio" class="btn-primary">Voir mes projets</a>
+    <a href="#contact" class="btn-outline">Me contacter</a>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <div class="marquee-item">Développement Web <span class="marquee-dot">◆</span> Design Graphique <span class="marquee-dot">◆</span> UI/UX Design <span class="marquee-dot">◆</span> Branding <span class="marquee-dot">◆</span> Web App <span class="marquee-dot">◆</span></div>
+    <div class="marquee-item">Développement Web <span class="marquee-dot">◆</span> Design Graphique <span class="marquee-dot">◆</span> UI/UX Design <span class="marquee-dot">◆</span> Branding <span class="marquee-dot">◆</span> Web App <span class="marquee-dot">◆</span></div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section class="section" id="about">
+  <div class="section-inner">
+    <div class="about-grid">
+      <div>
+        <div class="section-label reveal">// À propos</div>
+        <h2 class="about-title reveal">Créateur d'expériences<br><em>digitales</em> sur mesure</h2>
+        <p class="about-text reveal">Passionné par l'intersection entre le code et la créativité, je développe des solutions web performantes et des identités visuelles percutantes pour des marques ambitieuses.</p>
+        <p class="about-text reveal">Mon approche allie rigueur technique et sensibilité artistique — chaque projet est une opportunité de repousser les limites du design digital.</p>
+        <div class="about-stats reveal">
+          <div class="stat"><div class="stat-num">3+</div><div class="stat-label">Années d'expérience</div></div>
+          <div class="stat"><div class="stat-num">40+</div><div class="stat-label">Projets réalisés</div></div>
+          <div class="stat"><div class="stat-num">25+</div><div class="stat-label">Clients satisfaits</div></div>
+          <div class="stat"><div class="stat-num">100%</div><div class="stat-label">Passion & engagement</div></div>
+        </div>
+      </div>
+      <div class="about-card reveal">
+        <div class="avatar-box">KCO</div>
+        <div class="chips">
+          <span class="chip">HTML/CSS</span><span class="chip">JavaScript</span><span class="chip">React</span>
+          <span class="chip">PHP</span><span class="chip">WordPress</span><span class="chip">Figma</span>
+          <span class="chip">Photoshop</span><span class="chip">Illustrator</span><span class="chip">After Effects</span>
+          <span class="chip">Node.js</span><span class="chip">MySQL</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="section services-bg" id="services">
+  <div class="section-inner">
+    <div class="section-label reveal">// Services</div>
+    <h2 class="section-title reveal">Ce que je fais pour vous</h2>
+    <div class="services-grid">
+      <div class="service-card reveal">
+        <div class="service-num">01</div>
+        <h3 class="service-name">Développement Web</h3>
+        <p class="service-desc">Sites web sur mesure, applications web performantes, intégration CMS. Du site vitrine aux plateformes complexes, je code des solutions robustes et scalables.</p>
+        <div class="service-tools">
+          <span class="tool-tag">HTML/CSS</span><span class="tool-tag">JavaScript</span><span class="tool-tag">React</span><span class="tool-tag">PHP</span><span class="tool-tag">WordPress</span>
+        </div>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-num">02</div>
+        <h3 class="service-name">Design Graphique</h3>
+        <p class="service-desc">Identités visuelles, logos, chartes graphiques, supports print et digital. Des visuels qui racontent votre histoire et marquent les esprits.</p>
+        <div class="service-tools">
+          <span class="tool-tag">Illustrator</span><span class="tool-tag">Photoshop</span><span class="tool-tag">InDesign</span><span class="tool-tag">Canva Pro</span>
+        </div>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-num">03</div>
+        <h3 class="service-name">UI/UX Design</h3>
+        <p class="service-desc">Interfaces intuitives et esthétiques. Wireframes, prototypes interactifs, design system. J'optimise l'expérience utilisateur pour maximiser l'engagement.</p>
+        <div class="service-tools">
+          <span class="tool-tag">Figma</span><span class="tool-tag">Adobe XD</span><span class="tool-tag">Prototyping</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PORTFOLIO -->
+<section class="section" id="portfolio">
+  <div class="section-inner">
+    <div class="section-label reveal">// Portfolio</div>
+    <h2 class="section-title reveal">Projets Sélectionnés</h2>
+    <div class="projects-grid">
+      <div class="project-card reveal">
+        <div class="project-thumb"><div class="project-visual pv1">E-COMMERCE</div><div class="project-overlay"><a href="#" class="overlay-link">Voir le projet</a></div></div>
+        <div class="project-info"><div class="project-cat">Web Development</div><div class="project-name">Boutique Mode Africaine</div><div class="project-desc">E-commerce avec panier, paiement et back-office sur mesure.</div></div>
+      </div>
+      <div class="project-card reveal">
+        <div class="project-thumb"><div class="project-visual pv2">BRANDING</div><div class="project-overlay"><a href="#" class="overlay-link">Voir le projet</a></div></div>
+        <div class="project-info"><div class="project-cat">Design Graphique</div><div class="project-name">Identité TechStart</div><div class="project-desc">Logo, charte graphique et déclinaisons print.</div></div>
+      </div>
+      <div class="project-card reveal">
+        <div class="project-thumb"><div class="project-visual pv3">UI/UX</div><div class="project-overlay"><a href="#" class="overlay-link">Voir le projet</a></div></div>
+        <div class="project-info"><div class="project-cat">UI/UX Design</div><div class="project-name">App Santé Mobile</div><div class="project-desc">Interface d'une application de suivi médical.</div></div>
+      </div>
+      <div class="project-card reveal">
+        <div class="project-thumb"><div class="project-visual pv4">PORTFOLIO</div><div class="project-overlay"><a href="#" class="overlay-link">Voir le projet</a></div></div>
+        <div class="project-info"><div class="project-cat">Web Development</div><div class="project-name">Portfolio Artiste</div><div class="project-desc">Site vitrine avec animations et galerie interactive.</div></div>
+      </div>
+      <div class="project-card reveal">
+        <div class="project-thumb"><div class="project-visual pv5">SOCIAL</div><div class="project-overlay"><a href="#" class="overlay-link">Voir le projet</a></div></div>
+        <div class="project-info"><div class="project-cat">Design Graphique</div><div class="project-name">Campagne Social Media</div><div class="project-desc">60 templates personnalisables pour réseaux sociaux.</div></div>
+      </div>
+      <div class="project-card reveal">
+        <div class="project-thumb"><div class="project-visual pv6">DASHBOARD</div><div class="project-overlay"><a href="#" class="overlay-link">Voir le projet</a></div></div>
+        <div class="project-info"><div class="project-cat">Web Development</div><div class="project-name">Dashboard Analytics</div><div class="project-desc">Interface admin avec visualisation de données en temps réel.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="section services-bg" id="contact">
+  <div class="section-inner">
+    <div class="contact-grid">
+      <div>
+        <div class="section-label reveal">// Contact</div>
+        <h2 class="contact-title reveal">Travaillons<br><span>ensemble</span></h2>
+        <p class="contact-desc reveal">Vous avez un projet ? Discutons-en ! Disponible pour des missions freelance et des collaborations long terme.</p>
+        <div class="contact-info reveal">
+          <div class="contact-item"><span class="contact-item-icon">✉</span><span>carelomario@email.com</span></div>
+          <div class="contact-item"><span class="contact-item-icon">☏</span><span>+237 6XX XXX XXX</span></div>
+          <div class="contact-item"><span class="contact-item-icon">◎</span><span>Cameroun — Disponible à distance</span></div>
+        </div>
+      </div>
+      <div class="contact-form reveal">
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Prénom</label><input type="text" class="form-input" placeholder="Jean"/></div>
+          <div class="form-group"><label class="form-label">Nom</label><input type="text" class="form-input" placeholder="Dupont"/></div>
+        </div>
+        <div class="form-group"><label class="form-label">Email</label><input type="email" class="form-input" placeholder="jean@exemple.com"/></div>
+        <div class="form-group"><label class="form-label">Message</label><textarea class="form-textarea" placeholder="Décrivez votre projet..."></textarea></div>
+        <button class="btn-primary" style="width:100%;text-align:center;">Envoyer</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">KOM FOME CAREL OMARIO</div>
+  <div class="footer-copy">© 2026 — Tous droits réservés</div>
+  <div class="footer-socials">
+    <a href="#" class="social-link">LinkedIn</a>
+    <a href="#" class="social-link">Behance</a>
+    <a href="#" class="social-link">GitHub</a>
+    <a href="#" class="social-link">Instagram</a>
+  </div>
+</footer>
+
+<script>
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove',e=>{
+    mx=e.clientX; my=e.clientY;
+    cursor.style.transform=`translate(${mx-5}px,${my-5}px)`;
+  });
+  (function loop(){ rx+=(mx-rx)*0.12; ry+=(my-ry)*0.12; ring.style.transform=`translate(${rx-15}px,${ry-15}px)`; requestAnimationFrame(loop); })();
+
+  const obs=new IntersectionObserver(entries=>entries.forEach((e,i)=>{if(e.isIntersecting)setTimeout(()=>e.target.classList.add('visible'),i*70);}),{threshold:0.1});
+  document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>
